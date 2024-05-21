@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Realtime Database</title>
+  <style>
+    /* CSS to style the floor plan */
+    #floorPlan {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .room {
+      fill: #ddd;
+      /* Default color */
+    }
+
+    .room.red {
+      fill: red;
+      /* Red color */
+    }
+
+    .room.green {
+      fill: green;
+      /* Green color */
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Status and Floor Plan from Firebase Realtime Database</h1>
+  <div id="currentTime"></div>
+  <svg id="floorPlan" viewBox="0 0 800 400">
+    <!-- Sample floor plan SVG -->
+    <rect class="room" x="100" y="100" width="200" height="200" />
+  </svg>
+  <ul id="statusList"></ul> <!-- Status list for displaying IN/OUT/UNKNOWN -->
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-analytics.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBtL2yoBHcOeQjzZL9hwK629HefsZsL06E",
+      authDomain: "hall-gpt.firebaseapp.com",
+      databaseURL: "https://hall-gpt-default-rtdb.asia-southeast1.firebasedatabase.app/",
+      projectId: "hall-gpt",
+      storageBucket: "hall-gpt.appspot.com",
+      messagingSenderId: "1087631587161",
+      appId: "1:1087631587161:web:791697ca30d8fa48a07e48",
+      measurementId: "G-57YJYMS87F"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    // Reference to your database
+    const db = getDatabase(app);
+
+    // Reference to the 'Proximity' node in your database
+    const proximityRef = ref(db, 'Promixity');
+
+    // Previous proximity value to detect changes
+    let previousProximityValue = null;
+
+    function updateCurrentTime() {
+      const currentTimeDiv = document.getElementById('currentTime');
+      const now = new Date();
+      currentTimeDiv.textContent = `Current Time: ${formatDate(now)}`;
+    }
+
+    function formatDate(date) {
+      return date.toLocaleString('en-US', {
+        month: 'short',
+        day: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      });
+    }
+
+    // Call updateCurrentTime every second to update the time continuously
+    setInterval(updateCurrentTime, 1000);
+  
+    // Function to fetch and log the data
+    onValue(proximityRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const proximityValue = snapshot.val();
+        console.log("Proximity value from database:", proximityValue);
+
+        if (proximityValue !== previousProximityValue) {
+          const rooms = document.querySelectorAll('.room'); // Select all rooms
+          rooms.forEach((room) => {
+            if (proximityValue === '0') {
+              room.classList.add('red');
+              room.classList.remove('green');
+            } else if (proximityValue === '1') {
+              room.classList.add('green');
+              room.classList.remove('red');
+            } else {
+              room.classList.add('red');
+              room.classList.remove('green');
+            }
+          });
+
+          // Update status text
+          const statusList = document.getElementById('statusList');
+          statusList.innerHTML = ''; // Clear previous data
+          const statusText = proximityValue === '0' ? 'OUT' : (proximityValue === '1' ? 'IN' : 'UNKNOWN');
+          const li = document.createElement('li');
+          li.textContent = `Status: ${statusText}`;
+          statusList.appendChild(li);
+
+          // Add timestamp
+          const timestampLi = document.createElement('li');
+          const currentDate = new Date();
+          timestampLi.textContent = `Timestamp: ${formatDate(currentDate)}`;
+          statusList.appendChild(timestampLi);
+
+          // Update the previous proximity value
+          previousProximityValue = proximityValue;
+        }
+      } else {
+        console.log("No data available at 'Proximity' reference.");
+      }
+    }, (error) => {
+      console.error("Error fetching data:", error);
+      const statusList = document.getElementById('statusList');
+      statusList.innerHTML = ''; // Clear previous data
+      const li = document.createElement('li');
+      li.textContent = `Error fetching data: ${error.message}`;
+      statusList.appendChild(li);
+    });
+  </script>
+</body>
+
+</html>
