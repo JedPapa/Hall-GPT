@@ -39,6 +39,10 @@
   </svg>
   <ul id="statusList"></ul> <!-- Status list for displaying IN/OUT/UNKNOWN -->
 
+  <div id="map"></div>
+  <!-- prettier-ignore -->
+
+
   <script type="module">
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
@@ -111,6 +115,17 @@
               room.classList.remove('green');
             }
           });
+          
+  async function initMap() {
+  const { Map } = await google.maps.importLibrary("maps");
+
+  map = new Map(document.getElementById("map") {
+    center: { lat: -34.397, lng: 150.644 },
+    zoom: 8,
+  });
+  }
+
+  initMap();
 
           // Update status text
           const statusList = document.getElementById('statusList');
