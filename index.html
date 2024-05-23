@@ -145,6 +145,9 @@
           li.textContent = `Error fetching data: ${error.message}`;
           statusList.appendChild(li);
         });
+        
+        // Capture coordinates
+        fetch('http://localhost:3000/').then(r=> r.json().then(j=> console.log('\nREQUEST',j)));
   </script>
 </body>
 </html>
