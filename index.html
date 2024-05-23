@@ -108,53 +108,53 @@
               room.classList.add('red');
               room.classList.remove('green');
             } else if (proximityValue === '1') {
-              room.classList.add('green');
-              room.classList.remove('red');
-            } else {
-              room.classList.add('red');
-              room.classList.remove('green');
-            }
-          });
+                room.classList.add('green');
+                room.classList.remove('red');
+              } else {
+                  room.classList.add('red');
+                  room.classList.remove('green');
+                }
+      });
           
-  async function initMap() {
-  const { Map } = await google.maps.importLibrary("maps");
+      async function initMap() {
+        const { Map } = await google.maps.importLibrary("maps");
 
-  map = new Map(document.getElementById("map"), {
-    center: { lat: -34.397, lng: 150.644 },
-    zoom: 8,
-  });
-  }
+        map = new Map(document.getElementById("map"), {
+        center: { lat: -34.397, lng: 150.644 },
+        zoom: 8,
+        });
+      }
 
-  initMap();
+      initMap();
 
-          // Update status text
-          const statusList = document.getElementById('statusList');
-          statusList.innerHTML = ''; // Clear previous data
-          const statusText = proximityValue === '0' ? 'OUT' : (proximityValue === '1' ? 'IN' : 'UNKNOWN');
-          const li = document.createElement('li');
-          li.textContent = `Status: ${statusText}`;
-          statusList.appendChild(li);
+      // Update status text
+      const statusList = document.getElementById('statusList');
+      statusList.innerHTML = ''; // Clear previous data
+      const statusText = proximityValue === '0' ? 'OUT' : (proximityValue === '1' ? 'IN' : 'UNKNOWN');
+      const li = document.createElement('li');
+      li.textContent = `Status: ${statusText}`;
+      statusList.appendChild(li);
 
-          // Add timestamp
-          const timestampLi = document.createElement('li');
-          const currentDate = new Date();
-          timestampLi.textContent = `Timestamp: ${formatDate(currentDate)}`;
-          statusList.appendChild(timestampLi);
+      // Add timestamp
+      const timestampLi = document.createElement('li');
+      const currentDate = new Date();
+      timestampLi.textContent = `Timestamp: ${formatDate(currentDate)}`;
+      statusList.appendChild(timestampLi);
 
-          // Update the previous proximity value
-          previousProximityValue = proximityValue;
-        }
+      // Update the previous proximity value
+      previousProximityValue = proximityValue;
+      }
       } else {
         console.log("No data available at 'Proximity' reference.");
       }
     }, (error) => {
-      console.error("Error fetching data:", error);
-      const statusList = document.getElementById('statusList');
-      statusList.innerHTML = ''; // Clear previous data
-      const li = document.createElement('li');
-      li.textContent = `Error fetching data: ${error.message}`;
-      statusList.appendChild(li);
-    });
+          console.error("Error fetching data:", error);
+          const statusList = document.getElementById('statusList');
+          statusList.innerHTML = ''; // Clear previous data
+          const li = document.createElement('li');
+          li.textContent = `Error fetching data: ${error.message}`;
+          statusList.appendChild(li);
+        });
   </script>
 </body>
 </html>
