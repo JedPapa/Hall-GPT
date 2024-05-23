@@ -39,8 +39,8 @@
   </svg>
   <ul id="statusList"></ul> <!-- Status list for displaying IN/OUT/UNKNOWN -->
 
-  <div id="map"></div>
-  <!-- prettier-ignore -->
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3860.08652547378!2d120.98668067590476!3d14.651029575838434!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b5d55299d009%3A0xc93c5a872b094576!2sSystems%20Plus%20Computer%20College!5e0!3m2!1sen!2sph!4v1716446668926!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+  </iframe>
 
 
   <script type="module">
@@ -116,16 +116,6 @@
                 }
       });
           
-      async function initMap() {
-        const { Map } = await google.maps.importLibrary("maps");
-
-        map = new Map(document.getElementById("map"), {
-        center: { lat: -34.397, lng: 150.644 },
-        zoom: 8,
-        });
-      }
-
-      initMap();
 
       // Update status text
       const statusList = document.getElementById('statusList');
