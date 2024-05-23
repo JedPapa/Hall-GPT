@@ -14,8 +14,8 @@ const analytics = getAnalytics(app);
 TinyGPSPlus gps;
 SoftwareSerial SerialGPS(4, 5); 
 
-const char* ssid = "OPPO A96";
-const char* password = "GwaponiJed";
+const char* ssid = "Eren";
+const char* password = "123456789";
 
 float Latitude , Longitude;
 int year , month , date, hour , minute , second;
